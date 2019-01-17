@@ -1,0 +1,1 @@
+![Í¼Æ¬Ãû³Æ](https://github.com/FantasyEngineer/shareOptions/blob/master/gif.gif)  
