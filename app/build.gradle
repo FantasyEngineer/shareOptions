@@ -8,15 +8,91 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+        flavorDimensions("versionCode")
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-    buildTypes {
+
+    signingConfigs {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            storeFile file('../houjiguo.jks')//添加签名文件的路径
+            storePassword 'houjiguo'
+            keyAlias 'key0'
+            keyPassword 'houjiguo'
         }
     }
+
+    buildTypes {
+        debug {
+            //是否起用混淆
+            minifyEnabled false
+            //是否启用zipAlign压缩
+            zipAlignEnabled true
+            signingConfig signingConfigs.release// 配置release包的签名
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            //是否起用混淆
+            minifyEnabled true
+            //是否启用zipAlign压缩
+            zipAlignEnabled true
+            //是否清理无用资源
+            shrinkResources true
+            signingConfig signingConfigs.release// 配置release包的签名
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+    }
+
+    // Channels
+    productFlavors {
+        // 自定义偏好设置.
+        //大括号内的 applicationId可以不要，如果加上，便是打包时的包名
+        google {
+            applicationId "com.broadmobi.channel.google"
+            buildConfigField "boolean", "LOG_DEBUG", "false"// BuildConfig.LOG_DEBUG  这样来调用
+            buildConfigField("String", "SERVER_URL", '"www/.google/.com"')
+            manifestPlaceholders = [CHANNEL : "google",
+                                    APP_NAME: "这是goole渠道",
+                                    APP_ICON: "@mipmap/google"]
+        }
+        wandoujia {
+            applicationId "com.broadmobi.channel.wandoujia"
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            buildConfigField("String", "SERVER_URL", '"www/.google/.com"')
+            manifestPlaceholders = [CHANNEL : "wandoujia",
+                                    APP_NAME: "这是wandoujia渠道",
+                                    APP_ICON: "@mipmap/wandoujia"]
+        }
+
+//        baidu {
+//            applicationId "com.broadmobi.channel.baidu"
+//            buildConfigField "boolean", "LOG_DEBUG", "true"
+//            manifestPlaceholders = [CHANNEL_VALUE: "baidu"]
+//
+//        }
+//        qihu360 {
+//            applicationId "com.broadmobi.channel.qihu"
+//            buildConfigField "boolean", "LOG_DEBUG", "true"
+//            manifestPlaceholders = [CHANNEL_VALUE: "qihu"]
+//        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.all { output ->
+                def date = new Date()
+                def formattedDate = date.format('yyMMdd_HH_mm')
+//                def releaseApkName = variant.productFlavors[0].name + '_' + defaultConfig.versionName + '_' + variant.buildType.name + '.apk'
+//                if (variant.buildType.name
+//                        .equals('release')) {
+                def releaseApkName = variant.productFlavors[0].name + '_' + defaultConfig.versionName + '_' + variant.buildType.name + '_' + formattedDate + '.apk'
+//                }
+                outputFileName = releaseApkName
+            }
+        }
+    }
+
 }
+
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')

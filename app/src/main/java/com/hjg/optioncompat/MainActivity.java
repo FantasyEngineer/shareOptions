@@ -1,6 +1,8 @@
 package com.hjg.optioncompat;
 
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -9,9 +11,11 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +62,23 @@ public class MainActivity extends AppCompatActivity {
         list.add("1243123123213");
         MyAdapter adapter = new MyAdapter(list, MainActivity.this);
         recyclerview.setAdapter(adapter);
+
+
+
+
+
+
+        /*以下为多渠道打包测试*/
+
+        ApplicationInfo appInfo = null;
+        try {
+            appInfo = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
+            String msg = appInfo.metaData.getString("UMENG_CHANNEL");
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
     }
 }

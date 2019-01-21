@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SecondActivity extends AppCompatActivity {
 
@@ -19,6 +20,8 @@ public class SecondActivity extends AppCompatActivity {
         image = findViewById(R.id.image);
         ViewCompat.setTransitionName(text, MainActivity.TEXT);
         ViewCompat.setTransitionName(image, MainActivity.IMAGE);
+
+        Toast.makeText(this, "zheshi" + BuildConfig.LOG_DEBUG, Toast.LENGTH_SHORT).show();
 
     }
 }
